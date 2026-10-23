@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Salsas El Chimeco</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="ingredients-bg">
+  <span class="i1">🌶️</span><span class="i2">🧄</span><span class="i3">🍅</span><span class="i4">🔥</span>
+  <span class="i5">🫑</span><span class="i6">🌶️</span><span class="i7">🧄</span><span class="i8">🍅</span>
+  <span class="i9">🔥</span><span class="i10">🌶️</span><span class="i11">🫒</span><span class="i12">🌶️</span>
+  <span class="i13">🧅</span><span class="i14">🌶️</span><span class="i15">🔥</span><span class="i16">🍅</span>
+</div>
+
+<header class="hero-dark">
+  <div class="flame-wrap"><div class="flame-icon">🔥</div></div>
+  <div class="logo-box">
+    <img src="logo-chivo.png" alt="Salsas El Chimeco">
+  </div>
+  <h1 class="title-distressed">SALSAS<br><span>EL CHIMECO</span></h1>
+  <div class="brush-line"></div>
+  <p class="sub-brand">by chimecos food</p>
+</header>
+
+<p class="intro-dark">Arma tu pedido para tu tienda. Datos, sabores y envío por WhatsApp.</p>
+
+<div class="badges-dark">
+  <a href="#datos">Fácil de pedir</a>
+  <a href="#sabores">Elige tus sabores</a>
+  <a href="#resumen">WhatsApp</a>
+</div>
+
+<section class="card-dark" id="datos">
+  <div class="card-header"><span class="num">01</span><h2>Datos de tu tienda</h2></div>
+  <label>Nombre de la tienda *</label><input type="text" id="tienda" placeholder="Ej. Abarrotes Lupita">
+  <label>Nombre de quien hace el pedido *</label><input type="text" id="nombre" placeholder="Tu nombre">
+  <label>WhatsApp</label><input type="tel" id="whatsapp" placeholder="Número">
+  <label>Ciudad / colonia</label><input type="text" id="ciudad" placeholder="Ej. Santiago Papasquiaro">
+  <button class="btn-yellow" onclick="obtenerUbicacion()">📍 Compartir ubicación</button>
+  <div id="statusUbi" class="status-ubi">Ubicación no compartida aún</div>
+</section>
+
+<section class="card-dark" id="sabores">
+  <div class="card-header"><span class="num">02</span><h2>Escoge tus salsas</h2></div>
+  <div class="salsas-grid">
+    <div class="salsa-item" data-nombre="Chimeca de la Birria"><div class="salsa-info"><h3>Chimeca de la Birria</h3><small>Sabor intenso</small></div><div class="qty"><button onclick="cambiar(this,-1)">-</button><input type="number" value="0" min="0"><button onclick="cambiar(this,1)">+</button></div></div>
+    <div class="salsa-item" data-nombre="Ranchera Verde"><div class="salsa-info"><h3>Ranchera Verde</h3><small>Verde fresca</small></div><div class="qty"><button onclick="cambiar(this,-1)">-</button><input type="number" value="0" min="0"><button onclick="cambiar(this,1)">+</button></div></div>
+    <div class="salsa-item" data-nombre="Verde Brava"><div class="salsa-info"><h3>Verde Brava</h3><small>Verde cremosa</small></div><div class="qty"><button onclick="cambiar(this,-1)">-</button><input type="number" value="0" min="0"><button onclick="cambiar(this,1)">+</button></div></div>
+    <div class="salsa-item hot" data-nombre="Mata Suegras"><div class="salsa-info"><h3>Mata Suegras</h3><small>Picor atrevido</small></div><div class="qty"><button onclick="cambiar(this,-1)">-</button><input type="number" value="0" min="0"><button onclick="cambiar(this,1)">+</button></div></div>
+    <div class="salsa-item" data-nombre="La Marisquera"><div class="salsa-info"><h3>La Marisquera</h3><small>Para mariscos</small></div><div class="qty"><button onclick="cambiar(this,-1)">-</button><input type="number" value="0" min="0"><button onclick="cambiar(this,1)">+</button></div></div>
+    <div class="salsa-item infernal" data-nombre="Dorada Infernal"><div class="salsa-info"><h3>Dorada Infernal</h3><small>Habanero extremo</small></div><div class="qty"><button onclick="cambiar(this,-1)">-</button><input type="number" value="0" min="0"><button onclick="cambiar(this,1)">+</button></div></div>
+  </div>
+</section>
+
+<section class="card-dark" id="extra">
+  <div class="card-header"><span class="num">03</span><h2>¿Algo más?</h2></div>
+  <textarea id="comentario" placeholder="Referencias, horarios"></textarea>
+  <button class="btn-white" onclick="generarResumen()">Revisar mi pedido →</button>
+</section>
+
+<section class="card-dark" id="resumen">
+  <div class="card-header"><span class="num">04</span><h2>Revisa tu pedido</h2></div>
+  <div id="resumenContenido" class="resumen-box">Aún no has generado el resumen.</div>
+  <button class="btn-green" onclick="enviarPedido()">Enviar por WhatsApp</button>
+  <p class="legal">WhatsApp: 649 106 8809</p>
+</section>
+
+<script>
+let lat=null,lon=null;
+function cambiar(b,d){const i=b.parentElement.querySelector('input');let v=parseInt(i.value)||0;v=Math.max(0,v+d);i.value=v;}
+function obtenerUbicacion(){const s=document.getElementById('statusUbi');if(!navigator.geolocation){s.textContent="No soportado";return;}s.textContent="Solicitando...";navigator.geolocation.getCurrentPosition(p=>{lat=p.coords.latitude;lon=p.coords.longitude;s.textContent=`✅ ${lat.toFixed(5)}, ${lon.toFixed(5)}`;s.style.color="#4caf50";},e=>{s.textContent="❌ "+e.message;});}
+function generarResumen(){const t=document.getElementById('tienda').value||'No esp.';const n=document.getElementById('nombre').value||'No esp.';const w=document.getElementById('whatsapp').value||'No esp.';const c=document.getElementById('ciudad').value||'No esp.';const com=document.getElementById('comentario').value||'Sin comentarios';let h="",txt="",tot=0;document.querySelectorAll('.salsa-item').forEach(it=>{const ca=parseInt(it.querySelector('input').value)||0;if(ca>0){h+=`<div class='resumen-line'><span>${it.dataset.nombre}</span><b>${ca} pzs</b></div>`;txt+=`- ${it.dataset.nombre}: ${ca} pzs\n`;tot+=ca;}});if(tot===0)h="<p style='color:#ff5252'>No elegiste salsas</p>";const ubi=lat?`https://www.google.com/maps?q=${lat},${lon}`:'No compartida';document.getElementById('resumenContenido').innerHTML=`<div class='resumen-bloque'><b>Tienda:</b> ${t}<br><b>Pide:</b> ${n}<br><b>WhatsApp:</b> ${w}<br><b>Ciudad:</b> ${c}<br><b>Ubi:</b> ${ubi}<br><b>Extra:</b> ${com}</div><hr>${h}<div class='resumen-line total'><span>TOTAL</span><b>${tot} pzs</b></div>`;window._d={t,n,w,c,com,txt,tot,ubi};document.getElementById('resumen').scrollIntoView({behavior:'smooth'});}
+function enviarPedido(){if(!window._d){generarResumen();return;}const d=window._d;if(d.tot===0){alert("Elige sabor");return;}const m=`Hola Chimeco! Pedido abarrotes%0A%0A*TIENDA:* ${d.t}%0A*PIDE:* ${d.n}%0A*WSP:* ${d.w}%0A*CIUDAD:* ${d.c}%0A*UBI:* ${d.ubi}%0A%0A*PEDIDO:*%0A${d.txt}%0ATOTAL: ${d.tot} pzs%0A%0A*EXTRA:* ${d.com}`;window.open(`https://wa.me/526491068809?text=${m}`,'_blank');}
+</script>
+</body>
+</html>
